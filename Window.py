@@ -20,7 +20,7 @@ class Window(object):
         if (index < 0 or index >= len(self.code_list)):
             return
             pass
-        code = self.code_list[index]
+        code = self.code_list[index]['code']
         SChart.SChart(StockInfo.get_stocks(code)).show()
         pass
 
@@ -28,7 +28,7 @@ class Window(object):
         root = Tk()
         listb = Listbox(root, width=100, height=len(self.code_list) + 1)
         for i, s in enumerate(self.code_list):
-            listb.insert(i, s)
+            listb.insert(i, "%s[%s]" % (s['name'], s['code']))
             pass
         listb.bind("<Double-Button-1>", self.on_selected)
         listb.pack()

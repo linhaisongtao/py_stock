@@ -17,7 +17,9 @@ class SChart(object):
         x_label = []
         p = []
         roe15_p = []
+        pures = []
         count = len(list) / 5
+        maxY = 0
         for index, l in enumerate(list):
             x.append(index)
             if index % count == 0:
@@ -28,11 +30,14 @@ class SChart(object):
                 pass
             p.append(l.price)
             roe15_p.append(l.roe15_price)
+            pures.append(l.pure)
             pass
 
         plt.plot(x, p)
         plt.plot(x, roe15_p)
-        plt.legend(['p', 'roe15_price'])
+        plt.plot(x, pures)
+        plt.legend(['p', 'roe15_price', 'pure'])
+        plt.axis([0, len(x) + 1, 0, max([max(p), max(roe15_p), max(pures)]) + 1])
         plt.xticks(x, x_label)
         plt.title(list[0].code)
         plt.show()
