@@ -4,15 +4,30 @@ import matplotlib.pyplot as plt
 import tushare as ts
 import pandas as pd
 import StockInfo as si
+import math
 
 
 class SChart(object):
-    def __init__(self, stock_list=[]):
-        self.stock_list = stock_list
+    def __init__(self, titles, stock_lists=[]):
+        self.stock_lists = stock_lists
+        self.titles = titles
         pass
 
     def show(self):
-        list = self.stock_list
+        print 'start draw chart'
+        total = len(self.titles)
+        row = (int)(math.ceil(math.sqrt(total)))
+        column = (int)(math.ceil(1.0 * total / row))
+        for i, title in enumerate(self.titles):
+            datas = self.__show(plt.subplot(row * 100 + column * 10 + i + 1), self.stock_lists[i])
+            plt.title(self.titles[i])
+            plt.xticks(datas[0],datas[1])
+            pass
+        print 'show chart'
+        plt.show()
+        pass
+
+    def __show(self, subplot, list):
         x = []
         x_label = []
         p = []
@@ -33,14 +48,14 @@ class SChart(object):
             pures.append(1)
             pass
 
-        plt.plot(x, p)
-        plt.plot(x, roe15_p)
-        plt.plot(x, pures)
-        plt.legend(['p', 'roe15_price', 'pure'])
-        plt.axis([0, len(x) + 1, 0, max([max(p), max(roe15_p), max(pures)]) + 1])
-        plt.xticks(x, x_label)
-        plt.title(list[0].code)
-        plt.show()
+        subplot.plot(x, p)
+        subplot.plot(x, roe15_p)
+        subplot.plot(x, pures)
+        subplot.legend(['pb', 'roe15_price', 'pure'])
+        subplot.axis([0, len(x) + 1, 0, max([max(p), max(roe15_p), max(pures)]) + 1])
+        # subplot.xticks(x, x_label)
+        # subplot.title(self.titles)
+        return (x, x_label)
         pass
 
     pass

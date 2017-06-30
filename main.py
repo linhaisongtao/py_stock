@@ -20,15 +20,11 @@ lines = open('selected', 'r').readlines()
 code_list = []
 for l in lines:
     l = l.replace('\n', '').split('  ')
-    print l
     s = {}
     s['code'] = l[0]
     s['name'] = l[1]
     code_list.append(s)
     pass
-print code_list
 
 Window.Window(code_list).show()
 
-# list = si.get_stocks('600048')
-# sc.SChart(list).show()

@@ -272,9 +272,9 @@ def get_pb_stocks(code='601166'):
             pass
         pass
 
-    for l in list:
-        print l
-        pass
+    # for l in list:
+    #     print l
+    #     pass
     return list
 
     pass
