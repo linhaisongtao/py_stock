@@ -12,7 +12,7 @@ pb_data_dir = '.pb'
 roe_data_dir = '.roe'
 # roe_selected_date = ['0331', '0630', '0930', '1231']
 roe_selected_date = ['1231']
-average_year_count = 1
+average_year_count = 5
 
 
 class StockInfo(object):
