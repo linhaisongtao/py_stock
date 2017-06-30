@@ -28,9 +28,9 @@ class SChart(object):
             else:
                 x_label.append("")
                 pass
-            p.append(l.price)
-            roe15_p.append(l.roe15_price)
-            pures.append(l.pure)
+            p.append(l.pb)
+            roe15_p.append(l.pb_wanted)
+            pures.append(1)
             pass
 
         plt.plot(x, p)

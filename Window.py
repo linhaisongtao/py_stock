@@ -21,7 +21,7 @@ class Window(object):
             return
             pass
         code = self.code_list[index]['code']
-        SChart.SChart(StockInfo.get_stocks(code)).show()
+        SChart.SChart(StockInfo.get_pb_stocks(code)).show()
         pass
 
     def show(self):

@@ -8,6 +8,7 @@ import SChart as sc
 import json, datetime, time
 
 data_dir = '.p'
+pb_data_dir = '.pb'
 roe_data_dir = '.roe'
 # roe_selected_date = ['0331', '0630', '0930', '1231']
 roe_selected_date = ['1231']
@@ -15,7 +16,7 @@ average_year_count = 1
 
 
 class StockInfo(object):
-    def __init__(self, date="", price=0, pure=0, roe=0, roe15_price=0, code='', roe5=0):
+    def __init__(self, date="", price=0, pure=0, roe=0, roe15_price=0, code='', roe5=0, pb=0, pb_wanted=0):
         self.date = date
         self.price = price
         self.pure = pure
@@ -23,11 +24,13 @@ class StockInfo(object):
         self.roe15_price = roe15_price
         self.code = code
         self.roe5 = roe5
+        self.pb = pb
+        self.pb_wanted = pb_wanted
         pass
 
     def __str__(self):
-        return "date=%s\tprice=%.2f\tpure=%.2f\troe=%.2f\troe15_price=%.2f\troe5=%.2f" % (
-            self.date, self.price, self.pure, self.roe, self.roe15_price, self.roe5)
+        return "date=%s\tprice=%.2f\tpure=%.2f\troe=%.2f\troe15_price=%.2f\troe5=%.2f\tpb=%.2f\tpb_wanted=%.2f" % (
+            self.date, self.price, self.pure, self.roe, self.roe15_price, self.roe5, self.pb, self.pb_wanted)
         pass
 
     pass
@@ -209,4 +212,69 @@ def __find_matched_roe(s, roe_list):
             return roe
             pass
         pass
+    pass
+
+
+def __request_pb_from_net(market='SH', code='601166'):
+    timestamp = (long)(time.mktime(datetime.datetime.now().timetuple()) * 1000)
+    url = "https://www.joudou.com/stockinfogate/stock/logpepbs/%s.SH?_t=%d" % (code, timestamp)
+    print url
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    return response.read()
+    pass
+
+
+def get_pb_stocks(code='601166'):
+    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    # get basic history info
+    if not os.path.exists(pb_data_dir):
+        os.mkdir(pb_data_dir)
+        pass
+    file_name = pb_data_dir + "/" + code + "_" + date_str + ".json"
+    list = []
+
+    if os.path.exists(file_name):
+        print 'read from file', file_name
+        json_string = open(file_name, 'r').read()
+        pass
+    else:
+        print 'read from net'
+        json_string = __request_pb_from_net('SH', code)
+        open(file_name, 'w').write(json_string)
+        pass
+
+    json_list = json.loads(json_string)['data']['data']
+    for data in json_list:
+        s = StockInfo()
+        s.date = datetime.datetime.strptime(data[0], '%Y%m%d').strftime('%Y-%m-%d')
+        s.code = code
+        s.pb = data[3]
+        list.append(s)
+        pass
+
+    reo_list = __get_roes(code=code)
+    for l in list:
+        matched_s = __find_matched_roe(l, reo_list)
+        if matched_s == None:
+            l.pure = 0
+            l.roe = 0
+            l.roe15_price = 0
+            l.roe5 = 0
+            l.pb_wanted = 0
+            pass
+        else:
+            l.pure = matched_s.pure
+            l.roe = matched_s.roe
+            l.roe5 = matched_s.roe5
+            l.roe15_price = l.pure * l.roe5 / 15
+            l.pb_wanted = l.roe5 / 15
+            pass
+        pass
+
+    for l in list:
+        print l
+        pass
+    return list
+
     pass

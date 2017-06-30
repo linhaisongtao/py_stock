@@ -9,8 +9,11 @@ import datetime, time
 import json
 import Window
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+
 
 lines = open('selected', 'r').readlines()
 
