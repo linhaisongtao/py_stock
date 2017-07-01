@@ -61,14 +61,20 @@ class SChart(object):
         # find bottom 20% value
         pb_list = sorted(pb_list)
         pb_bottom_20 = pb_list[int(len(pb_list) * 0.2)]
+        pb_bottom_10 = pb_list[int(len(pb_list) * 0.1)]
         pb_average = sum(pb_list) / len(pb_list)
 
         subplot.plot(x, p)
         subplot.plot(x, roe5_p, color='m')
         subplot.plot(x, roe1_p, color='r')
 
-        subplot.axhline(pb_bottom_20, color='c', linestyle='--')
-        subplot.axhline(pb_average, color='g', linestyle='--')
+        subplot.axhline(pb_bottom_20, color='g', linestyle='--')
+        subplot.text(0, pb_bottom_20, 'bottom_20', fontsize=10, verticalalignment="bottom", horizontalalignment="right")
+        subplot.axhline(pb_bottom_10, color='darkgreen', linestyle='--')
+        subplot.text(0, pb_bottom_10, 'bottom_10', fontsize=10, verticalalignment="top", horizontalalignment="right")
+
+        subplot.axhline(pb_average, color='c', linestyle=':')
+        subplot.text(0, pb_average, 'average', fontsize=10, verticalalignment="bottom", horizontalalignment="right")
 
         subplot.legend(['pb', 'roe5_pb', 'roe1_pb'])
         subplot.axis([0, len(x) + 1, 0, max([max(p), max(roe5_p), max(roe1_p)]) + 0.3])
