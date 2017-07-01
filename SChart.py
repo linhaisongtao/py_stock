@@ -38,7 +38,7 @@ class SChart(object):
         roe1_p = []
 
         maxY = 0
-        start = max(0, len(list) - 1500)
+        start = max(0, len(list) - 1250)
         print 'start index', start
         for index, l in enumerate(list):
             if index >= start:
