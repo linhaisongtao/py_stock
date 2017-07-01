@@ -12,31 +12,34 @@ pb_data_dir = '.pb'
 roe_data_dir = '.roe'
 # roe_selected_date = ['0331', '0630', '0930', '1231']
 roe_selected_date = ['1231']
-average_year_count = 5
 
 
 class StockInfo(object):
-    def __init__(self, date="", price=0, pure=0, roe=0, roe15_price=0, code='', roe5=0, pb=0, pb_wanted=0):
+    def __init__(self, date="", price=0, pure=0, roe=0, roe5_price=0, code='', roe5=0, pb=0, pb5_wanted=0, roe1=0,
+                 pb1_wanted=0):
         self.date = date
         self.price = price
         self.pure = pure
         self.roe = roe
-        self.roe15_price = roe15_price
+        self.roe5_price = roe5_price
         self.code = code
         self.roe5 = roe5
         self.pb = pb
-        self.pb_wanted = pb_wanted
+        self.pb5_wanted = pb5_wanted
+        self.roe1 = roe1
+        self.pb1_wanted = pb1_wanted
         pass
 
     def __str__(self):
-        return "date=%s\tprice=%.2f\tpure=%.2f\troe=%.2f\troe15_price=%.2f\troe5=%.2f\tpb=%.2f\tpb_wanted=%.2f" % (
-            self.date, self.price, self.pure, self.roe, self.roe15_price, self.roe5, self.pb, self.pb_wanted)
+        return "date=%s\tprice=%.2f\tpure=%.2f\troe=%.2f\troe5_price=%.2f\troe5=%.2f\tpb=%.2f\tpb5_wanted=%.2f\tpb1_wanted=%.2f" % (
+            self.date, self.price, self.pure, self.roe, self.roe5_price, self.roe5, self.pb, self.pb5_wanted,
+            self.pb1_wanted)
         pass
 
     pass
 
 
-def get_stocks(code='601166'):
+def get_stocks(code='601166', average_year_count=1):
     date_str = datetime.datetime.now().strftime("%Y-%m-%d")
     # get basic history info
     if not os.path.exists(data_dir):
@@ -61,27 +64,27 @@ def get_stocks(code='601166'):
             s.code = code
             s.pure = 12
             s.roe = 15
-            s.roe15_price = 12
+            s.roe5_price = 12
             list.append(s)
             pass
         list.reverse()
         __write_to_file(file_name, list)
         pass
 
-    reo_list = __get_roes(code=code)
+    reo_list = __get_roes(code=code, average_year_count=average_year_count)
     for l in list:
         matched_s = __find_matched_roe(l, reo_list)
         if matched_s == None:
             l.pure = 0
             l.roe = 0
-            l.roe15_price = 0
+            l.roe5_price = 0
             l.roe5 = 0
             pass
         else:
             l.pure = matched_s.pure
             l.roe = matched_s.roe
             l.roe5 = matched_s.roe5
-            l.roe15_price = l.pure * l.roe5 / 15
+            l.roe5_price = l.pure * l.roe5 / 15
             pass
         pass
 
@@ -95,7 +98,7 @@ def __write_to_file(name, list):
     pass
 
 
-def __get_roes(code):
+def __get_roes(code, average_year_count=1):
     date_str = datetime.datetime.now().strftime("%Y-%m-%d")
     if not os.path.exists(roe_data_dir):
         os.mkdir(roe_data_dir)
@@ -158,13 +161,14 @@ def __get_roes(code):
             pass
         pass
     for i, s in enumerate(s_list):
-        s.roe5 = __compute_roe_average(s_list, i, average_year_count)
+        s.roe5 = __compute_roe_average(s_list, i, 5)
+        s.roe1 = __compute_roe_average(s_list, i, 1)
         pass
     return s_list
     pass
 
 
-def __compute_roe_average(roe_list, start_index, count):
+def __compute_roe_average(roe_list, start_index, count=1):
     end = min(start_index + count, len(roe_list))
     total = end - start_index
     roe_l = []
@@ -225,7 +229,7 @@ def __request_pb_from_net(market='SH', code='601166'):
     pass
 
 
-def get_pb_stocks(code='601166'):
+def get_pb_stocks(code='601166', average_year_count=1):
     date_str = datetime.datetime.now().strftime("%Y-%m-%d")
     # get basic history info
     if not os.path.exists(pb_data_dir):
@@ -253,22 +257,27 @@ def get_pb_stocks(code='601166'):
         list.append(s)
         pass
 
-    reo_list = __get_roes(code=code)
+    reo_list = __get_roes(code=code, average_year_count=average_year_count)
     for l in list:
         matched_s = __find_matched_roe(l, reo_list)
         if matched_s == None:
             l.pure = 0
             l.roe = 0
-            l.roe15_price = 0
+            l.roe5_price = 0
             l.roe5 = 0
-            l.pb_wanted = 0
+            l.pb5_wanted = 0
+            l.roe1 = 0
+            l.pb1_wanted = 0
             pass
         else:
             l.pure = matched_s.pure
             l.roe = matched_s.roe
             l.roe5 = matched_s.roe5
-            l.roe15_price = l.pure * l.roe5 / 15
-            l.pb_wanted = l.roe5 / 15
+            l.roe5_price = l.pure * l.roe5 / 15
+            l.pb5_wanted = l.roe5 / 15
+
+            l.roe1 = matched_s.roe1
+            l.pb1_wanted = l.roe1 / 15
             pass
         pass
 

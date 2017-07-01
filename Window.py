@@ -24,9 +24,9 @@ class Window(object):
             pass
         code = self.code_list[index]['code']
         name = self.code_list[index]['name']
-        title = name + "[" + code + "]"
-        s = StockInfo.get_pb_stocks(code)
-        SChart.SChart([title], [s]).show()
+        title1 = name + "[" + code + "]%d" % 1
+        s1 = StockInfo.get_pb_stocks(code, 1)
+        SChart.SChart([title1], [s1]).show()
         pass
 
     def callCheckbutton(self):
@@ -40,7 +40,7 @@ class Window(object):
         for i, state in enumerate(self.check_states):
             if state.get() == 1:
                 titles.append("%s[%s]" % (self.code_list[i]['name'], self.code_list[i]['code']))
-                stocks.append(StockInfo.get_pb_stocks(self.code_list[i]['code']))
+                stocks.append(StockInfo.get_pb_stocks(self.code_list[i]['code'], 5))
                 pass
             pass
         SChart.SChart(titles, stocks).show()
