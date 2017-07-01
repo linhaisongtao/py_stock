@@ -51,9 +51,9 @@ class SChart(object):
                 pass
             pass
 
-        count = len(x_label) / 5 - 1
+        count = len(x_label) / 5
         for index, label in enumerate(x_label):
-            if index % count != 0:
+            if index != 0 and (index + 1) % count != 0:
                 x_label[index] = ''
                 pass
             pass
