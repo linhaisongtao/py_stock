@@ -18,7 +18,7 @@ class SChart(object):
         total = len(self.titles)
         row = (int)(math.ceil(math.sqrt(total)))
         column = (int)(math.ceil(1.0 * total / row))
-        plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.15, hspace=0.15)
+        plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, wspace=0.18, hspace=0.18)
 
         for i, title in enumerate(self.titles):
             datas = self.__show(plt.subplot(row * 100 + column * 10 + i + 1), self.stock_lists[i])
@@ -64,17 +64,27 @@ class SChart(object):
         pb_bottom_10 = pb_list[int(len(pb_list) * 0.1)]
         pb_average = sum(pb_list) / len(pb_list)
 
+        total = len(p)
         subplot.plot(x, p)
+        subplot.text(total, p[total - 1], ' pb[%.2f]' % p[total - 1], fontsize=10, verticalalignment="center",
+                     horizontalalignment="left")
         subplot.plot(x, roe5_p, color='m')
+        subplot.text(total, roe5_p[total - 1], ' pb5[%.2f]' % roe5_p[total - 1], fontsize=10, verticalalignment="center",
+                     horizontalalignment="left")
         subplot.plot(x, roe1_p, color='r')
+        subplot.text(total, roe1_p[total - 1], ' pb1[%.2f]' % roe1_p[total - 1], fontsize=10, verticalalignment="center",
+                     horizontalalignment="left")
 
         subplot.axhline(pb_bottom_20, color='g', linestyle='--')
-        subplot.text(0, pb_bottom_20, 'bottom_20', fontsize=10, verticalalignment="bottom", horizontalalignment="right")
+        subplot.text(0, pb_bottom_20, '20[%.2f] ' % pb_bottom_20, fontsize=10, verticalalignment="bottom",
+                     horizontalalignment="right")
         subplot.axhline(pb_bottom_10, color='darkgreen', linestyle='--')
-        subplot.text(0, pb_bottom_10, 'bottom_10', fontsize=10, verticalalignment="top", horizontalalignment="right")
+        subplot.text(0, pb_bottom_10, '10[%.2f] ' % pb_bottom_10, fontsize=10, verticalalignment="top",
+                     horizontalalignment="right")
 
         subplot.axhline(pb_average, color='c', linestyle=':')
-        subplot.text(0, pb_average, 'average', fontsize=10, verticalalignment="bottom", horizontalalignment="right")
+        subplot.text(0, pb_average, 'aver[%.2f] ' % pb_average, fontsize=10, verticalalignment="bottom",
+                     horizontalalignment="right")
 
         subplot.legend(['pb', 'roe5_pb', 'roe1_pb'])
         subplot.axis([0, len(x) + 1, 0, max([max(p), max(roe5_p), max(roe1_p)]) + 0.3])
