@@ -39,7 +39,7 @@ class SChart(object):
 
         maxY = 0
         start = max(0, len(list) - 1250)
-        print 'start index', start
+        print 'start , data count =', (len(list) - start)
         for index, l in enumerate(list):
             if index >= start:
                 x.append(index - start)
@@ -69,10 +69,12 @@ class SChart(object):
         subplot.text(total, p[total - 1], ' pb[%.2f]' % p[total - 1], fontsize=10, verticalalignment="center",
                      horizontalalignment="left")
         subplot.plot(x, roe5_p, color='m')
-        subplot.text(total, roe5_p[total - 1], ' pb5[%.2f]' % roe5_p[total - 1], fontsize=10, verticalalignment="center",
+        subplot.text(total, roe5_p[total - 1], ' pb5[%.2f]' % roe5_p[total - 1], fontsize=10,
+                     verticalalignment="center",
                      horizontalalignment="left")
         subplot.plot(x, roe1_p, color='r')
-        subplot.text(total, roe1_p[total - 1], ' pb1[%.2f]' % roe1_p[total - 1], fontsize=10, verticalalignment="center",
+        subplot.text(total, roe1_p[total - 1], ' pb1[%.2f]' % roe1_p[total - 1], fontsize=10,
+                     verticalalignment="center",
                      horizontalalignment="left")
 
         subplot.axhline(pb_bottom_20, color='g', linestyle='--')
@@ -81,6 +83,11 @@ class SChart(object):
         subplot.axhline(pb_bottom_10, color='darkgreen', linestyle='--')
         subplot.text(0, pb_bottom_10, '10[%.2f] ' % pb_bottom_10, fontsize=10, verticalalignment="top",
                      horizontalalignment="right")
+        pb_top_20 = pb_list[int(len(pb_list) * 0.8)]
+        subplot.axhline(pb_top_20, color='darkred', linestyle='--')
+        subplot.text(0, pb_top_20, '80[%.2f] ' % pb_top_20, fontsize=10, verticalalignment="top",
+                     horizontalalignment="right")
+
 
         subplot.axhline(pb_average, color='c', linestyle=':')
         subplot.text(0, pb_average, 'aver[%.2f] ' % pb_average, fontsize=10, verticalalignment="bottom",
