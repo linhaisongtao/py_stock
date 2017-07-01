@@ -86,8 +86,8 @@ class SChart(object):
         subplot.text(0, pb_average, 'aver[%.2f] ' % pb_average, fontsize=10, verticalalignment="bottom",
                      horizontalalignment="right")
 
-        subplot.legend(['pb', 'roe5_pb', 'roe1_pb'])
-        subplot.axis([0, len(x) + 1, 0, max([max(p), max(roe5_p), max(roe1_p)]) + 0.3])
+        # subplot.legend(['pb', 'roe5_pb', 'roe1_pb'])
+        subplot.axis([0, len(x) + 1, 0, max([max(p), max(roe5_p), max(roe1_p)]) * 1.03])
         # subplot.xticks(x, x_label)
         # subplot.title(self.titles)
         return (x, x_label)
