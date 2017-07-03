@@ -9,6 +9,8 @@ import SChart
 from Tkinter import *
 
 import threading
+import rank as rk
+import RankChart as rc
 
 
 class Window(object):
@@ -46,6 +48,26 @@ class Window(object):
         SChart.SChart(titles, stocks).show()
         pass
 
+    def rank5_button_clicked(self):
+        print 'rank5_button_clicked'
+        rank_list = rk.get_rank_list()
+        for rank in rank_list:
+            print rank
+            pass
+        rank_chart = rc.RankChart("rank in past 5 years",rank_list)
+        rank_chart.show()
+        pass
+
+    def rank10_button_clicked(self):
+        print 'rank10_button_clicked'
+        rank_list = rk.get_rank_list( 10)
+        for rank in rank_list:
+            print rank
+            pass
+        rank_chart = rc.RankChart("rank in past 10 years", rank_list)
+        rank_chart.show()
+        pass
+
     def show(self):
         root = Tk()
         listb = Listbox(root, width=100, height=len(self.code_list) + 1)
@@ -53,16 +75,18 @@ class Window(object):
             listb.insert(i, "%s[%s]" % (s['name'], s['code']))
             pass
         listb.bind("<Double-Button-1>", self.on_selected)
-        listb.grid(row=0, rowspan=len(self.code_list) + 1, column=0)
+        listb.grid(row=0, rowspan=len(self.code_list), column=0, columnspan=2)
+        Button(root, text="rank in past 5 years", command=self.rank5_button_clicked).grid(row=len(self.code_list), column=0)
+        Button(root, text="rank in past 10 years", command=self.rank10_button_clicked).grid(row=len(self.code_list), column=1)
 
         self.check_states = []
         for i, s in enumerate(self.code_list):
             var = IntVar()
             self.check_states.append(var)
             check_button = Checkbutton(root, text="%s[%s]" % (s['name'], s['code']), variable=var)
-            check_button.grid(row=i, column=1)
+            check_button.grid(row=i, column=2)
             pass
-        Button(root, text="compare", command=self.button_clicked).grid(row=len(self.code_list), column=1)
+        Button(root, text="compare", command=self.button_clicked).grid(row=len(self.code_list), column=2)
 
         root.title(datetime.datetime.now().strftime("%Y-%m-%d"))
         root.mainloop()
