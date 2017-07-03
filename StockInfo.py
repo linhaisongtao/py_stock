@@ -229,7 +229,7 @@ def __request_pb_from_net(market='SH', code='601166'):
     pass
 
 
-def get_pb_stocks(code='601166', average_year_count=1):
+def get_pb_stocks(code='601166', average_year_count=1, max_count=-1):
     date_str = datetime.datetime.now().strftime("%Y-%m-%d")
     # get basic history info
     if not os.path.exists(pb_data_dir):
@@ -284,6 +284,15 @@ def get_pb_stocks(code='601166', average_year_count=1):
     # for l in list:
     #     print l
     #     pass
-    return list
-
+    if max_count <= 0:
+        return list
+        pass
+    else:
+        start_index = max(0, len(list) - max_count)
+        s_list = []
+        for i in range(start_index, len(list)):
+            s_list.append(list[i])
+            pass
+        return s_list
+        pass
     pass
