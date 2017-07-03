@@ -8,9 +8,10 @@ import math
 
 
 class RankChart(object):
-    def __init__(self, rank_list, year = 5):
+    def __init__(self, title, rank_list, year=5):
         self.rank_list = rank_list
         self.year = year
+        self.title = title
         pass
 
     def show(self):
@@ -38,6 +39,7 @@ class RankChart(object):
         plt.xticks(x_mids, x_labels, rotation=-45, fontsize=10)
         plt.axhline(0.2, color='c', linestyle=':')
         plt.legend()
+        plt.title(self.title)
         plt.show()
         pass
 

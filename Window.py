@@ -54,17 +54,17 @@ class Window(object):
         for rank in rank_list:
             print rank
             pass
-        rank_chart = rc.RankChart(rank_list)
+        rank_chart = rc.RankChart("rank in past 5 years",rank_list)
         rank_chart.show()
         pass
 
     def rank10_button_clicked(self):
         print 'rank10_button_clicked'
-        rank_list = rk.get_rank_list(10)
+        rank_list = rk.get_rank_list( 10)
         for rank in rank_list:
             print rank
             pass
-        rank_chart = rc.RankChart(rank_list)
+        rank_chart = rc.RankChart("rank in past 10 years", rank_list)
         rank_chart.show()
         pass
 
@@ -76,8 +76,8 @@ class Window(object):
             pass
         listb.bind("<Double-Button-1>", self.on_selected)
         listb.grid(row=0, rowspan=len(self.code_list), column=0, columnspan=2)
-        Button(root, text="rank5", command=self.rank5_button_clicked).grid(row=len(self.code_list), column=0)
-        Button(root, text="rank10", command=self.rank10_button_clicked).grid(row=len(self.code_list), column=1)
+        Button(root, text="rank in past 5 years", command=self.rank5_button_clicked).grid(row=len(self.code_list), column=0)
+        Button(root, text="rank in past 10 years", command=self.rank10_button_clicked).grid(row=len(self.code_list), column=1)
 
         self.check_states = []
         for i, s in enumerate(self.code_list):
