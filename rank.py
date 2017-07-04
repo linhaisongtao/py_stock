@@ -113,10 +113,10 @@ def get_rank_list(sort_year=5):
         str += c['code']
         pass
     date_str = datetime.datetime.now().strftime('%Y-%m-%d_%H')
-    file_name = '.rank/date[%s]_year[%d]_%s.json' % (date_str, sort_year, __get_md5(str))
+    file_name = '.' + date_str + '/rank_year[%d]_%s.json' % (sort_year, __get_md5(str))
     print file_name
-    if not os.path.exists('.rank'):
-        os.mkdir('.rank')
+    if not os.path.exists("." + date_str):
+        os.mkdir("." + date_str)
         pass
 
     if os.path.exists(file_name):
