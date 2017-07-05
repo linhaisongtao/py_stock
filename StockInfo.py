@@ -6,6 +6,7 @@ import pandas as pd
 import StockInfo as si
 import SChart as sc
 import json, datetime, time
+import DateUtil
 
 data_dir = '.p'
 pb_data_dir = '.pb'
@@ -40,7 +41,7 @@ class StockInfo(object):
 
 
 def get_stocks(code='601166', average_year_count=1):
-    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    date_str = DateUtil.get_now_date_str()
     # get basic history info
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
@@ -99,7 +100,7 @@ def __write_to_file(name, list):
 
 
 def __get_roes(code, average_year_count=1):
-    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    date_str = DateUtil.get_now_date_str()
     if not os.path.exists("." + date_str):
         os.mkdir("." + date_str)
         pass
@@ -230,7 +231,7 @@ def __request_pb_from_net(market='SH', code='601166'):
 
 
 def get_pb_stocks(code='601166', average_year_count=1, max_count=-1):
-    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    date_str = DateUtil.get_now_date_str()
     # get basic history info
     if not os.path.exists("." + date_str):
         os.mkdir("." + date_str)
