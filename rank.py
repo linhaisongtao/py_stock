@@ -3,6 +3,7 @@ import source
 import pandas as pd
 import hashlib
 import datetime, os, json
+import DateUtil
 
 
 class RankInfo(object):
@@ -112,11 +113,11 @@ def get_rank_list(sort_year=5):
     for c in codes:
         str += c['code']
         pass
-    date_str = datetime.datetime.now().strftime('%Y-%m-%d_%H')
-    file_name = '.rank/date[%s]_year[%d]_%s.json' % (date_str, sort_year, __get_md5(str))
+    date_str = DateUtil.get_now_date_str()
+    file_name = '.' + date_str + '/rank_year[%d]_%s.json' % (sort_year, __get_md5(str))
     print file_name
-    if not os.path.exists('.rank'):
-        os.mkdir('.rank')
+    if not os.path.exists("." + date_str):
+        os.mkdir("." + date_str)
         pass
 
     if os.path.exists(file_name):
