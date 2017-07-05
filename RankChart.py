@@ -38,6 +38,8 @@ class RankChart(object):
         plt.bar(xes10, pb_10_positions, bar_width, alpha=opacity, color='g', label='pb_10_position')
         plt.xticks(x_mids, x_labels, rotation=-45, fontsize=10)
         plt.axhline(0.2, color='c', linestyle=':')
+        plt.axhline(0.5, color='y', linestyle=':')
+        plt.axhline(0.8, color='r', linestyle=':')
         plt.legend()
         plt.title(self.title)
         plt.show()
