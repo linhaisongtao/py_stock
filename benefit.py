@@ -64,7 +64,7 @@ class BenefitChart(object):
             self.__draw_benefit(i, roe / 100, pb_now, pb20)
             legends.append("%s[roe=%.2f] pb_buy=%.2f pb_fu=%.2f" % (self.codes[i], roe, pb_now, pb20))
             pass
-        plt.axhline(0.2, color='c', linestyle=':')
+        plt.axhline(0, color='c', linestyle=':')
         plt.legend(legends)
         plt.xlabel('year')
         plt.ylabel('benefit')
@@ -122,7 +122,7 @@ class BenefitChart(object):
             pass
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
-        plt.axhline(0.2, color='c', linestyle=':')
+        plt.axhline(0, color='c', linestyle=':')
         plt.xlabel('year')
         plt.ylabel('benefit')
         plt.show()
