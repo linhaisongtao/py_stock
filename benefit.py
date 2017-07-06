@@ -102,4 +102,30 @@ class BenefitChart(object):
         plt.plot(years, future_benefits, linestyle=line_style)
         pass
 
+    def show_chart(self, year, roe, pb_buy, pb_future):
+        if not os.path.exists('benefit'):
+            os.mkdir('benefit')
+            pass
+        name = "year[%d]-roe[%.2f]-pb_buy[%.2f]-pb_future[%.2f]" % (year, roe, pb_buy, pb_future)
+        csv_writer = csv.writer(open('benefit/' + name + ".csv", 'wb'))
+        csv_writer.writerow([Util.get_now_date_str()])
+        csv_writer.writerow(['roe', roe, 'pb_buy', pb_buy, 'pb_future', pb_future])
+
+        years = np.arange(0, year + 1)
+        future_benefits = []
+        for y in years:
+            b = compute_benefit(y, roe, pb_buy, pb_future)
+            future_benefits.append(b['pb_future_benefit'])
+            csv_writer.writerow(
+                [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
+                 Util.format_float(b['pb_future_benefit'])])
+            pass
+        line_style = self.line_styles[0]
+        plt.plot(years, future_benefits, linestyle=line_style)
+        plt.axhline(0.2, color='c', linestyle=':')
+        plt.xlabel('year')
+        plt.ylabel('benefit')
+        plt.show()
         pass
+
+    pass

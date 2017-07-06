@@ -1,17 +1,14 @@
-import matplotlib.pyplot as plt
-
-import sys
 import datetime
-import threading
-import StockInfo
-import SChart
-
 from Tkinter import *
 
-import threading
-import rank as rk
 import RankChart as rc
+import SChart
+import StockInfo
 import benefit
+import rank as rk
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class Window(object):
@@ -109,8 +106,45 @@ class Window(object):
         Button(root, text="benefit_10years", command=self.benefit_button_clicked).grid(row=len(self.code_list),
                                                                                        column=3)
 
+        base_column = 4
+        base_row = 0
+        Label(root, text='-------benefit calculator------  ').grid(row=base_row, column=base_column, columnspan=2)
+        base_row += 1
+        Label(root, text='year:').grid(row=base_row, column=base_column)
+        year_str = StringVar()
+        year_str.set('10')
+        self.year_entry = Entry(root, textvariable=year_str)
+        self.year_entry.grid(row=base_row, column=base_column + 1)
+        base_row += 1
+        Label(root, text='roe:').grid(row=base_row, column=base_column)
+        roe_str = StringVar()
+        roe_str.set('0.15')
+        self.roe_entry = Entry(root, textvariable=roe_str)
+        self.roe_entry.grid(row=base_row, column=base_column + 1)
+        base_row += 1
+        Label(root, text='pb_buy:').grid(row=base_row, column=base_column)
+        pb_buy_str = StringVar()
+        pb_buy_str.set('1')
+        self.pb_buy_entry = Entry(root, textvariable=pb_buy_str)
+        self.pb_buy_entry.grid(row=base_row, column=base_column + 1)
+        base_row += 1
+        Label(root, text='pb_future:').grid(row=base_row, column=base_column)
+        pb_future_str = StringVar()
+        pb_future_str.set('1')
+        self.pb_future_entry = Entry(root, textvariable=pb_future_str)
+        self.pb_future_entry.grid(row=base_row, column=base_column + 1)
+        base_row += 1
+        Button(root, text='calculate', command=self.calculate_button_clicked).grid(row=base_row, column=base_column,
+                                                                                   columnspan=2)
+
         root.title(datetime.datetime.now().strftime("%Y-%m-%d"))
         root.mainloop()
+        pass
+
+    def calculate_button_clicked(self):
+        print 'calculate_button_clicked', self.pb_buy_entry.get()
+        benefit.BenefitChart(None, None).show_chart(int(self.year_entry.get()), float(self.roe_entry.get()),
+                                                    float(self.pb_buy_entry.get()), float(self.pb_future_entry.get()))
         pass
 
     pass
