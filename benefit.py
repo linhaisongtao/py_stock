@@ -14,7 +14,7 @@ def compute_benefit(year=0, roe=0, pb_buy=1, pb_future=1):
     pure = math.pow(1 + roe, year)
     price_future = pure * pb_future
     pb_benefit = pure - pb_buy
-    pb_future_benefit = price_future - pb_buy
+    pb_future_benefit = (price_future - pb_buy) / pb_buy
 
     m = {}
     m['pure'] = pure
@@ -65,7 +65,7 @@ class BenefitChart(object):
             legends.append("%s[roe=%.2f] pb_buy=%.2f pb_fu=%.2f" % (self.codes[i], roe, pb_now, pb20))
             pass
         plt.axhline(0, color='c', linestyle=':')
-        plt.legend(legends)
+        plt.legend(legends, 'upper left')
         plt.xlabel('year')
         plt.ylabel('benefit')
         plt.show()
@@ -116,9 +116,10 @@ class BenefitChart(object):
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
-            csv_writer.writerow(
-                [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
-                 Util.format_float(b['pb_future_benefit'])])
+            row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
+                   Util.format_float(b['pb_future_benefit'])]
+            csv_writer.writerow(row)
+
             pass
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
