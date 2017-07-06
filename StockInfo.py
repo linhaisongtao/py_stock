@@ -72,7 +72,7 @@ def get_stocks(code='601166', average_year_count=1):
         __write_to_file(file_name, list)
         pass
 
-    reo_list = __get_roes(code=code, average_year_count=average_year_count)
+    reo_list = get_roes(code=code, average_year_count=average_year_count)
     for l in list:
         matched_s = __find_matched_roe(l, reo_list)
         if matched_s == None:
@@ -99,7 +99,7 @@ def __write_to_file(name, list):
     pass
 
 
-def __get_roes(code, average_year_count=1):
+def get_roes(code, average_year_count=1):
     date_str = DateUtil.get_now_date_str()
     if not os.path.exists("." + date_str):
         os.mkdir("." + date_str)
@@ -258,7 +258,7 @@ def get_pb_stocks(code='601166', average_year_count=1, max_count=-1):
         list.append(s)
         pass
 
-    reo_list = __get_roes(code=code, average_year_count=average_year_count)
+    reo_list = get_roes(code=code, average_year_count=average_year_count)
     for l in list:
         matched_s = __find_matched_roe(l, reo_list)
         if matched_s == None:
