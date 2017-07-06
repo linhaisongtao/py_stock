@@ -60,9 +60,9 @@ class BenefitChart(object):
             pb_now = pbs[pb_count - 1].pb
             pb20 = sorted(pbs, cmp=self.__cmp_pb)[int(pb_count * 0.2)].pb
             print roe, pb_now, pb20
-            pb20 = min([pb20, pb_now])
-            self.__draw_benefit(i, roe / 100, pb_now, pb20)
-            legends.append("%s[roe=%.2f] pb_buy=%.2f pb_fu=%.2f" % (self.codes[i], roe, pb_now, pb20))
+            # pb20 = min([pb20, pb_now])
+            benefit_future = self.__draw_benefit(i, roe / 100, pb_now, pb20)
+            legends.append("%s[roe=%.2f] buy=%.2f fu=%.2f benefit=%.2f" % (self.names[i], roe, pb_now, pb20, benefit_future))
             pass
         plt.axhline(0, color='c', linestyle=':')
         plt.legend(legends, 'upper left')
@@ -94,12 +94,14 @@ class BenefitChart(object):
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
-            csv_writer.writerow(
-                [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
-                 Util.format_float(b['pb_future_benefit'])])
+            row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
+                 Util.format_float(b['pb_future_benefit'])]
+            csv_writer.writerow(row)
+            print row
             pass
         line_style = self.line_styles[index % len(self.line_styles)]
         plt.plot(years, future_benefits, linestyle=line_style)
+        return future_benefits[len(future_benefits) - 1]
         pass
 
     def show_chart(self, year, roe, pb_buy, pb_future):
@@ -119,7 +121,7 @@ class BenefitChart(object):
             row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
                    Util.format_float(b['pb_future_benefit'])]
             csv_writer.writerow(row)
-
+            print row
             pass
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
