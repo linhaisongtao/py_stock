@@ -68,7 +68,7 @@ class BenefitChart(object):
             pb20 = sorted(pbs, cmp=self.__cmp_pb)[int(pb_count * 0.2)].pb
             print roe, pb_now, pb20
             # pb20 = min([pb20, pb_now])
-            benefit_future = self.__draw_benefit(i, max_year, roe / 100, pb_now, pb20)
+            benefit_future = self.__draw_benefit(i, max_year, roe / 100, pb_now, pb20, len(self.codes) == 1)
             legends.append(
                 "%sroe=%.2f%%买=%.2f卖=%.2f收益=%.2f%%" % (self.names[i], roe, pb_now, pb20, benefit_future * 100))
             pass
@@ -84,6 +84,7 @@ class BenefitChart(object):
             plt.axvline(10, color='r', linestyle=':')
             pass
 
+        plt.subplots_adjust(left=0.1, right=0.85, top=0.9, bottom=0.1, wspace=0.18, hspace=0.18)
         plt.legend(legends, 'upper left')
         plt.xlabel('year')
         plt.ylabel('benefit')
@@ -91,9 +92,11 @@ class BenefitChart(object):
         plt.show()
         pass
 
-    def __draw_benefit(self, index, max_year, roe, pb_buy, pb_future):
+    def __draw_benefit(self, index, max_year, roe, pb_buy, pb_future, only_one=False):
         years = np.arange(0, max_year + 1)
         future_benefits = []
+        buy_pb_benefits = []
+        pure_benefits = []
 
         if not os.path.exists('benefit'):
             os.mkdir('benefit')
@@ -102,7 +105,7 @@ class BenefitChart(object):
         Util.print_row([Util.get_now_date_str()], csv_writer)
         Util.print_row(['净资产收益率', roe, '买入时PB', pb_buy, '未来PB', pb_future], csv_writer)
         Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '未来1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'
-                        , '买入时pb的未来股价','买入时pb的未来收益率'], csv_writer)
+                           , '买入时pb的未来股价', '买入时pb的未来收益率'], csv_writer)
 
         # m['pure'] = pure
         # m['price_future'] = price_future
@@ -116,6 +119,11 @@ class BenefitChart(object):
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
+            if only_one:
+                buy_pb_benefits.append(b['pb_buy_future_benefit'])
+                pure_benefits.append(b['pb_benefit'])
+                pass
+
             row = [y, Util.format_float(roe), Util.format_float(b['pure']), 1,
                    Util.format_to_percentage(b['pb_benefit']),
                    Util.format_float(b['price_future']),
@@ -128,6 +136,16 @@ class BenefitChart(object):
             pass
         line_style = self.line_styles[index % len(self.line_styles)]
         plt.plot(years, future_benefits, linestyle=line_style)
+        if only_one:
+            plt.plot(years, buy_pb_benefits, linestyle=line_style)
+            plt.plot(years, pure_benefits, linestyle=line_style)
+            plt.text(max_year, future_benefits[max_year], '20点位[%.2f%%] ' % (future_benefits[max_year] * 100),
+                     fontsize=10, verticalalignment="center", horizontalalignment="left")
+            plt.text(max_year, buy_pb_benefits[max_year], '买入pb[%.2f%%] ' % (buy_pb_benefits[max_year] * 100),
+                     fontsize=10, verticalalignment="center", horizontalalignment="left")
+            plt.text(max_year, pure_benefits[max_year], '1倍pb[%.2f%%] ' % (pure_benefits[max_year] * 100),
+                     fontsize=10, verticalalignment="center", horizontalalignment="left")
+            pass
         return future_benefits[len(future_benefits) - 1]
         pass
 
@@ -143,9 +161,13 @@ class BenefitChart(object):
                            , '买入时pb的未来股价', '买入时pb的未来收益率'], csv_writer)
         years = np.arange(0, year + 1)
         future_benefits = []
+        buy_pb_benefits = []
+        pure_benefits = []
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
+            buy_pb_benefits.append(b['pb_buy_future_benefit'])
+            pure_benefits.append(b['pb_benefit'])
             row = [y, Util.format_float(roe), Util.format_float(b['pure']), 1,
                    Util.format_to_percentage(b['pb_benefit']),
                    Util.format_float(b['price_future']),
@@ -158,6 +180,15 @@ class BenefitChart(object):
             pass
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
+        plt.plot(years, buy_pb_benefits, linestyle=line_style)
+        plt.plot(years, pure_benefits, linestyle=line_style)
+        plt.text(year, future_benefits[year], '20点位[%.2f%%] ' % (future_benefits[year] * 100),
+                 fontsize=10, verticalalignment="center", horizontalalignment="left")
+        plt.text(year, buy_pb_benefits[year], '买入pb[%.2f%%] ' % (buy_pb_benefits[year] * 100),
+                 fontsize=10, verticalalignment="center", horizontalalignment="left")
+        plt.text(year, pure_benefits[year], '1倍pb[%.2f%%] ' % (pure_benefits[year] * 100),
+                 fontsize=10, verticalalignment="center", horizontalalignment="left")
+
         plt.axhline(0, color='c', linestyle='-')
         plt.axhline(1, color='y', linestyle=":")
         if year > 5:
@@ -170,6 +201,7 @@ class BenefitChart(object):
             pass
         plt.xlabel('year')
         plt.ylabel('benefit')
+        plt.subplots_adjust(left=0.1, right=0.85, top=0.9, bottom=0.1, wspace=0.18, hspace=0.18)
         plt.show()
         pass
 
