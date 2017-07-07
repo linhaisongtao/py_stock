@@ -7,6 +7,7 @@ import StockInfo as si
 import SChart as sc
 import json, datetime, time
 import DateUtil
+import Util
 
 data_dir = '.p'
 pb_data_dir = '.pb'
@@ -42,11 +43,8 @@ class StockInfo(object):
 
 def get_stocks(code='601166', average_year_count=1):
     date_str = DateUtil.get_now_date_str()
-    # get basic history info
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-        pass
-    file_name = data_dir + "/" + code + "_" + date_str + ".json"
+
+    file_name = Util.get_dir_name() + "/" + code + "_" + date_str + ".json"
     list = []
     if os.path.exists(file_name):
         print 'read from file', file_name
@@ -100,11 +98,8 @@ def __write_to_file(name, list):
 
 
 def get_roes(code, average_year_count=1):
-    date_str = DateUtil.get_now_date_str()
-    if not os.path.exists("." + date_str):
-        os.mkdir("." + date_str)
-        pass
-    file_name = "." + date_str + "/roe_" + code + "_" + ".json"
+
+    file_name = Util.get_dir_name() + "/roe_" + code + "_" + ".json"
     if os.path.exists(file_name):
         print 'read roe from file', file_name
         result_string = open(file_name, 'r').read()
@@ -231,12 +226,8 @@ def __request_pb_from_net(market='SH', code='601166'):
 
 
 def get_pb_stocks(code='601166', average_year_count=1, max_count=-1):
-    date_str = DateUtil.get_now_date_str()
     # get basic history info
-    if not os.path.exists("." + date_str):
-        os.mkdir("." + date_str)
-        pass
-    file_name = "." + date_str + "/pb_" + code + ".json"
+    file_name = Util.get_dir_name() + "/pb_" + code + ".json"
     list = []
 
     if os.path.exists(file_name):

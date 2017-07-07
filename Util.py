@@ -32,3 +32,20 @@ def get_now_date_str():
 def convert_date_str_to_str(s):
     return datetime.datetime.strptime(s, '%Y%m%d').strftime('%Y-%m-%d')
     pass
+
+
+import os
+
+
+def get_dir_name():
+    if not os.path.exists('.data'):
+        os.mkdir('.data')
+        pass
+
+    dir_name = '.data/' + get_now_date_str()
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
+        pass
+
+    return dir_name
+    pass

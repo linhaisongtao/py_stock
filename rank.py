@@ -106,6 +106,9 @@ def __get_md5(src):
     return m2.hexdigest()
 
 
+import Util
+
+
 def get_rank_list(sort_year=5):
     codes = source.get_selected_codes()
 
@@ -113,12 +116,8 @@ def get_rank_list(sort_year=5):
     for c in codes:
         str += c['code']
         pass
-    date_str = DateUtil.get_now_date_str()
-    file_name = '.' + date_str + '/rank_year[%d]_%s.json' % (sort_year, __get_md5(str))
+    file_name = Util.get_dir_name() + '/rank_year[%d]_%s.json' % (sort_year, __get_md5(str))
     print file_name
-    if not os.path.exists("." + date_str):
-        os.mkdir("." + date_str)
-        pass
 
     if os.path.exists(file_name):
         print 'read from file', file_name

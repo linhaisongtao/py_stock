@@ -65,9 +65,6 @@ class Window(object):
     def rank5_button_clicked(self):
         print 'rank5_button_clicked'
         rank_list = rk.get_rank_list()
-        for rank in rank_list:
-            print rank
-            pass
         rank_chart = rc.RankChart("rank in past 5 years", rank_list)
         rank_chart.show()
         pass
@@ -75,9 +72,6 @@ class Window(object):
     def rank10_button_clicked(self):
         print 'rank10_button_clicked'
         rank_list = rk.get_rank_list(10)
-        for rank in rank_list:
-            print rank
-            pass
         rank_chart = rc.RankChart("rank in past 10 years", rank_list)
         rank_chart.show()
         pass
