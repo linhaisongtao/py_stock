@@ -51,6 +51,7 @@ class BenefitChart(object):
 
     def show(self):
         legends = []
+        max_year = 10
         for i, code in enumerate(self.codes):
             print code
             roes = StockInfo.get_roes(code)
@@ -61,18 +62,30 @@ class BenefitChart(object):
             pb20 = sorted(pbs, cmp=self.__cmp_pb)[int(pb_count * 0.2)].pb
             print roe, pb_now, pb20
             # pb20 = min([pb20, pb_now])
-            benefit_future = self.__draw_benefit(i, roe / 100, pb_now, pb20)
-            legends.append("%s[roe=%.2f] buy=%.2f fu=%.2f benefit=%.2f" % (self.names[i], roe, pb_now, pb20, benefit_future))
+            benefit_future = self.__draw_benefit(i, max_year, roe / 100, pb_now, pb20)
+            legends.append(
+                "%s[roe=%.2f] buy=%.2f fu=%.2f benefit=%.2f" % (self.names[i], roe, pb_now, pb20, benefit_future))
             pass
         plt.axhline(0, color='c', linestyle='-')
-        plt.legend(legends, 'upper left')
+
+        plt.axhline(1, color='y', linestyle=":")
+        if max_year > 5:
+            plt.axvline(5, color='y', linestyle=':')
+            pass
+
+        plt.axhline(3, color='r', linestyle=':')
+        if max_year >= 10:
+            plt.axvline(10, color='r', linestyle=':')
+            pass
+
+        plt.legend(legends)
         plt.xlabel('year')
         plt.ylabel('benefit')
         plt.show()
         pass
 
-    def __draw_benefit(self, index, roe, pb_buy, pb_future):
-        years = np.arange(0, 11)
+    def __draw_benefit(self, index, max_year, roe, pb_buy, pb_future):
+        years = np.arange(0, max_year + 1)
         future_benefits = []
 
         if not os.path.exists('benefit'):
@@ -95,7 +108,7 @@ class BenefitChart(object):
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
             row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
-                 Util.format_float(b['pb_future_benefit'])]
+                   Util.format_float(b['pb_future_benefit'])]
             csv_writer.writerow(row)
             print row
             pass
