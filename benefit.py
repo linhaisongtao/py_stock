@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf-8')
 def compute_benefit(year=0, roe=0, pb_buy=1, pb_future=1):
     pure = math.pow(1 + roe, year)
     price_future = pure * pb_future
-    pb_benefit = pure - pb_buy
+    pb_benefit = (pure - pb_buy) / pb_buy
     pb_future_benefit = (price_future - pb_buy) / pb_buy
 
     m = {}
@@ -97,7 +97,7 @@ class BenefitChart(object):
         csv_writer = csv.writer(open('benefit/' + self.codes[index] + ".csv", 'wb'))
         Util.print_row([Util.get_now_date_str()], csv_writer)
         Util.print_row(['净资产收益率', roe, '买入时PB', pb_buy, '未来PB', pb_future], csv_writer)
-        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
+        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '未来1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
 
         # m['pure'] = pure
         # m['price_future'] = price_future
@@ -131,7 +131,7 @@ class BenefitChart(object):
         csv_writer = csv.writer(open('benefit/' + name + ".csv", 'wb'))
         Util.print_row([Util.get_now_date_str()], csv_writer)
         Util.print_row(['净资产收益率', roe, '买入时PB', pb_buy, '未来PB', pb_future], csv_writer)
-        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
+        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '未来1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
         years = np.arange(0, year + 1)
         future_benefits = []
         for y in years:
