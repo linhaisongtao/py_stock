@@ -139,6 +139,15 @@ class BenefitChart(object):
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
         plt.axhline(0, color='c', linestyle='-')
+        plt.axhline(1, color='y', linestyle=":")
+        if year > 5:
+            plt.axvline(5, color='y', linestyle=':')
+            pass
+
+        plt.axhline(3, color='r', linestyle=':')
+        if year >= 10:
+            plt.axvline(10, color='r', linestyle=':')
+            pass
         plt.xlabel('year')
         plt.ylabel('benefit')
         plt.show()
