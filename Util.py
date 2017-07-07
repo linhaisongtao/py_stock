@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# coding:utf-8
 def get_list_last(list, max_count=-1):
     if max_count <= 0:
         return list
@@ -16,6 +18,14 @@ def get_list_last(list, max_count=-1):
 def format_float(f):
     if isinstance(f, float):
         return '%.2f' % f
+        pass
+    return f
+    pass
+
+
+def format_to_percentage(f):
+    if isinstance(f, float):
+        return '%.2f%%' % (f * 100)
         pass
     return f
     pass
@@ -48,4 +58,19 @@ def get_dir_name():
         pass
 
     return dir_name
+    pass
+
+
+import csv
+
+
+def print_row(list, writer=None):
+    if writer != None:
+        writer.writerow(list)
+        pass
+    s = ''
+    for l in list:
+        s += str(l) + '\t'
+        pass
+    print s
     pass

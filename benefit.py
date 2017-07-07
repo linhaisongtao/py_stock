@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# coding:utf-8
 import csv
 import math
 import os
@@ -55,7 +57,7 @@ class BenefitChart(object):
         for i, code in enumerate(self.codes):
             print code
             roes = StockInfo.get_roes(code)
-            roe = roes[0].roe
+            roe = roes[0].roe5 * 0.85
             pbs = Util.get_list_last(StockInfo.get_pb_stocks(code), 1250)
             pb_count = len(pbs)
             pb_now = pbs[pb_count - 1].pb
@@ -64,7 +66,7 @@ class BenefitChart(object):
             # pb20 = min([pb20, pb_now])
             benefit_future = self.__draw_benefit(i, max_year, roe / 100, pb_now, pb20)
             legends.append(
-                "%s[roe=%.2f] buy=%.2f fu=%.2f benefit=%.2f" % (self.names[i], roe, pb_now, pb20, benefit_future))
+                "%sroe=%.2f%%买=%.2f卖=%.2f收益=%.2f%%" % (self.names[i], roe, pb_now, pb20, benefit_future * 100))
             pass
         plt.axhline(0, color='c', linestyle='-')
 
@@ -78,9 +80,10 @@ class BenefitChart(object):
             plt.axvline(10, color='r', linestyle=':')
             pass
 
-        plt.legend(legends)
+        plt.legend(legends, 'upper left')
         plt.xlabel('year')
         plt.ylabel('benefit')
+        plt.title('roe为最近5年平均数的85%,卖pb为近5年20%点位值')
         plt.show()
         pass
 
@@ -92,8 +95,10 @@ class BenefitChart(object):
             os.mkdir('benefit')
             pass
         csv_writer = csv.writer(open('benefit/' + self.codes[index] + ".csv", 'wb'))
-        csv_writer.writerow([Util.get_now_date_str()])
-        csv_writer.writerow(['roe', roe, 'pb_buy', pb_buy, 'pb_future', pb_future])
+        Util.print_row([Util.get_now_date_str()], csv_writer)
+        Util.print_row(['净资产收益率', roe, '买入时PB', pb_buy, '未来PB', pb_future], csv_writer)
+        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
+
         # m['pure'] = pure
         # m['price_future'] = price_future
         # m['pb_benefit'] = pb_benefit
@@ -102,15 +107,16 @@ class BenefitChart(object):
         # m['roe'] = roe
         # m['pb_buy'] = pb_buy
         # m['pb_future'] = pb_future
-        csv_writer.writerow(['year', 'roe', 'pure', 'pb_benefit', 'pb_future_benefit'])
 
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
-            row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
-                   Util.format_float(b['pb_future_benefit'])]
-            csv_writer.writerow(row)
-            print row
+            row = [y, Util.format_float(roe), Util.format_float(b['pure']), 1,
+                   Util.format_to_percentage(b['pb_benefit']),
+                   Util.format_float(b['price_future']),
+                   Util.format_float(b['pb_buy']),
+                   Util.format_to_percentage(b['pb_future_benefit'])]
+            Util.print_row(row, csv_writer)
             pass
         line_style = self.line_styles[index % len(self.line_styles)]
         plt.plot(years, future_benefits, linestyle=line_style)
@@ -123,18 +129,20 @@ class BenefitChart(object):
             pass
         name = "year[%d]-roe[%.2f]-pb_buy[%.2f]-pb_future[%.2f]" % (year, roe, pb_buy, pb_future)
         csv_writer = csv.writer(open('benefit/' + name + ".csv", 'wb'))
-        csv_writer.writerow([Util.get_now_date_str()])
-        csv_writer.writerow(['roe', roe, 'pb_buy', pb_buy, 'pb_future', pb_future])
-
+        Util.print_row([Util.get_now_date_str()], csv_writer)
+        Util.print_row(['净资产收益率', roe, '买入时PB', pb_buy, '未来PB', pb_future], csv_writer)
+        Util.print_row(['年', '净资产收益率', '净资产', '1倍市净率买入成本', '1倍市净率收益率', '预期股价', '当前市净率买入成本', '预期市净率收益率'], csv_writer)
         years = np.arange(0, year + 1)
         future_benefits = []
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
-            row = [y, Util.format_float(roe), Util.format_float(b['pure']), Util.format_float(b['pb_benefit']),
-                   Util.format_float(b['pb_future_benefit'])]
-            csv_writer.writerow(row)
-            print row
+            row = [y, Util.format_float(roe), Util.format_float(b['pure']), 1,
+                   Util.format_to_percentage(b['pb_benefit']),
+                   Util.format_float(b['price_future']),
+                   Util.format_float(b['pb_buy']),
+                   Util.format_to_percentage(b['pb_future_benefit'])]
+            Util.print_row(row, csv_writer)
             pass
         line_style = self.line_styles[0]
         plt.plot(years, future_benefits, linestyle=line_style)
