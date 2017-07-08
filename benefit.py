@@ -240,7 +240,7 @@ class BenefitChart(object):
             return o2['count'] - o1['count']
             pass
         else:
-            return int(10000 * (o1['pb_buy'] - o2['pb_buy']))
+            return int(10000 * (o2['pb_future_benefit'] - o1['pb_future_benefit']))
             pass
         pass
 
@@ -263,9 +263,11 @@ def sort_benefit():
     list = BenefitChart(names, codes).benefit_sort()
     csv_writer = csv.writer(open(Util.get_benefit_dir() + "/select.csv", 'wb'))
     csv_writer1 = csv.writer(open('selected_sorted.csv', 'wb'))
-    Util.print_row(['名字', 'code', '满足数量', '买入pb', '1pb收益率', '买pb收益率', '20%pb收益率'], csv_writer)
+    Util.print_row(['名字', 'code', '满足数量', '净资产收益率', '每股净资产', '买入pb', '1pb收益率', '买pb收益率', '20%pb收益率'], csv_writer)
     for m in list:
-        row = [m['name'], 'A' + m['code'], m['count'], Util.format_float(m['pb_buy']),
+        row = [m['name'], 'A' + m['code'], m['count'], Util.format_to_percentage(m['roe']),
+               Util.format_float(m['pure']),
+               Util.format_float(m['pb_buy']),
                Util.format_to_percentage(m['pb_benefit']),
                Util.format_to_percentage(m['pb_buy_future_benefit']), Util.format_to_percentage(m['pb_future_benefit'])]
         Util.print_row(row, csv_writer1)
