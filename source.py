@@ -7,13 +7,27 @@ import StockInfo as si
 import SChart as sc
 import datetime, time
 import json
-import sys
+import sys, csv
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
 def get_selected_codes():
+    csv_reader = csv.reader(open('selected_sorted.csv', 'r'))
+    code_list = []
+    for row in csv_reader:
+        m = {}
+        m['code'] = row[1].replace('A', '')
+        m['name'] = row[0]
+        m['count'] = int(row[2])
+        code_list.append(m)
+        pass
+    return code_list
+    pass
+
+
+def get_origin_selected_codes():
     lines = open('selected', 'r').readlines()
 
     code_list = []
@@ -30,3 +44,4 @@ def get_selected_codes():
         pass
     return code_list
     pass
+

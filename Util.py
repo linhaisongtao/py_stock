@@ -64,13 +64,29 @@ def get_dir_name():
 import csv
 
 
-def print_row(list, writer=None):
+def print_row(list, writer=None, print_console=True):
     if writer != None:
         writer.writerow(list)
         pass
-    s = ''
-    for l in list:
-        s += str(l) + '\t'
+    if print_console:
+        s = ''
+        for l in list:
+            s += str(l) + '\t'
+            pass
+        print s
         pass
-    print s
+    pass
+
+
+def get_benefit_dir():
+    if not os.path.exists('select_stock'):
+        os.mkdir('select_stock')
+        pass
+
+    dir_name = 'select_stock/' + get_now_date_str()
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
+        pass
+
+    return dir_name
     pass

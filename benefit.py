@@ -205,4 +205,70 @@ class BenefitChart(object):
         plt.show()
         pass
 
+    def benefit_sort(self):
+        b_list = []
+        for i, code in enumerate(self.codes):
+            print code
+            roes = StockInfo.get_roes(code)
+            roe = roes[0].roe5 * 0.85
+            pbs = Util.get_list_last(StockInfo.get_pb_stocks(code), 1250)
+            pb_count = len(pbs)
+            pb_now = pbs[pb_count - 1].pb
+            pb20 = sorted(pbs, cmp=self.__cmp_pb)[int(pb_count * 0.2)].pb
+            print roe, pb_now, pb20, 1
+            benefit_map = compute_benefit(10, roe / 100, pb_now, pb20)
+            benefit_map['name'] = self.names[i]
+            benefit_map['code'] = code
+            b_list.append(benefit_map)
+            benefit_map['count'] = 0
+            if benefit_map['pb_benefit'] >= 3:
+                benefit_map['count'] += 1
+                pass
+            if benefit_map['pb_future_benefit'] >= 3:
+                benefit_map['count'] += 1
+                pass
+            if benefit_map['pb_buy_future_benefit'] >= 3:
+                benefit_map['count'] += 1
+                pass
+            pass
+        b_list = sorted(b_list, cmp=self.__cmp_benefit_list)
+        return b_list
+        pass
+
+    def __cmp_benefit_list(self, o1, o2):
+        if o1['count'] != o2['count']:
+            return o2['count'] - o1['count']
+            pass
+        else:
+            return int(10000 * (o1['pb_buy'] - o2['pb_buy']))
+            pass
+        pass
+
+    pass
+
+
+import source
+
+
+def sort_benefit():
+    c_list = source.get_origin_selected_codes()
+    names = []
+    codes = []
+    for c in c_list:
+        names.append(c['name'])
+        codes.append(c['code'])
+        pass
+    print names
+    print codes
+    list = BenefitChart(names, codes).benefit_sort()
+    csv_writer = csv.writer(open(Util.get_benefit_dir() + "/select.csv", 'wb'))
+    csv_writer1 = csv.writer(open('selected_sorted.csv', 'wb'))
+    Util.print_row(['名字', 'code', '满足数量', '买入pb', '1pb收益率', '买pb收益率', '20%pb收益率'], csv_writer)
+    for m in list:
+        row = [m['name'], 'A' + m['code'], m['count'], Util.format_float(m['pb_buy']),
+               Util.format_to_percentage(m['pb_benefit']),
+               Util.format_to_percentage(m['pb_buy_future_benefit']), Util.format_to_percentage(m['pb_future_benefit'])]
+        Util.print_row(row, csv_writer1)
+        Util.print_row(row, csv_writer, False)
+        pass
     pass
