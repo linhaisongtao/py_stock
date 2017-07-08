@@ -102,10 +102,10 @@ class Window(object):
         for i, s in enumerate(self.code_list):
             var = IntVar()
             self.check_states.append(var)
-            check_button = Checkbutton(root, text="%s[%s]" % (s['name'], s['code']), variable=var)
+            check_button = Checkbutton(root, text="%s[%s]C[%d]" % (s['name'], s['code'], s['count']), variable=var)
             check_button.grid(row=i, column=2, columnspan=2)
             index = int(i)
-            check_button.bind("<Double-Button-1>", self.handlerAdaptor(self.check_button_double_clicked, index = index))
+            check_button.bind("<Double-Button-1>", self.handlerAdaptor(self.check_button_double_clicked, index=index))
             pass
         Button(root, text="compare", command=self.button_clicked).grid(row=len(self.code_list), column=2)
         Button(root, text="benefit_10years", command=self.benefit_button_clicked).grid(row=len(self.code_list),
