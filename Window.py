@@ -76,6 +76,15 @@ class Window(object):
         rank_chart.show()
         pass
 
+    def check_button_double_clicked(self, event, index):
+        print 'check_button_double_clicked', index
+        benefit.BenefitChart([self.code_list[index]['name']], [self.code_list[index]['code']]).show()
+        pass
+
+    def handlerAdaptor(self, fun, **kwds):
+        return lambda event, fun=self.check_button_double_clicked, kwds=kwds: fun(event, **kwds)
+        pass
+
     def show(self):
         root = Tk()
         listb = Listbox(root, width=100, height=len(self.code_list) + 1)
@@ -95,6 +104,8 @@ class Window(object):
             self.check_states.append(var)
             check_button = Checkbutton(root, text="%s[%s]" % (s['name'], s['code']), variable=var)
             check_button.grid(row=i, column=2, columnspan=2)
+            index = int(i)
+            check_button.bind("<Double-Button-1>", self.handlerAdaptor(self.check_button_double_clicked, index = index))
             pass
         Button(root, text="compare", command=self.button_clicked).grid(row=len(self.code_list), column=2)
         Button(root, text="benefit_10years", command=self.benefit_button_clicked).grid(row=len(self.code_list),
