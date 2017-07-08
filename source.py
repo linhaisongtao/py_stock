@@ -18,11 +18,15 @@ def get_selected_codes():
 
     code_list = []
     for l in lines:
-        l = l.replace('\n', '').split('  ')
-        s = {}
-        s['code'] = l[0]
-        s['name'] = l[1]
-        code_list.append(s)
+        if l.startswith('#') or l.startswith(' ') or l == '\n':
+            pass
+        else:
+            l = l.replace('\n', '').split('  ')
+            s = {}
+            s['code'] = l[0]
+            s['name'] = l[1]
+            code_list.append(s)
+        pass
         pass
     return code_list
     pass
