@@ -18,7 +18,7 @@ roe_selected_date = ['1231']
 
 class StockInfo(object):
     def __init__(self, date="", price=0, pure=0, roe=0, roe5_price=0, code='', roe5=0, pb=0, pb5_wanted=0, roe1=0,
-                 pb1_wanted=0):
+                 pb1_wanted=0, pe=0):
         self.date = date
         self.price = price
         self.pure = pure
@@ -30,6 +30,7 @@ class StockInfo(object):
         self.pb5_wanted = pb5_wanted
         self.roe1 = roe1
         self.pb1_wanted = pb1_wanted
+        self.pe = pe
         pass
 
     def __str__(self):
@@ -98,7 +99,6 @@ def __write_to_file(name, list):
 
 
 def get_roes(code, average_year_count=1):
-
     file_name = Util.get_dir_name() + "/roe_" + code + "_" + ".json"
     if os.path.exists(file_name):
         print 'read roe from file', file_name
@@ -246,6 +246,7 @@ def get_pb_stocks(code='601166', average_year_count=1, max_count=-1):
         s.date = datetime.datetime.strptime(data[0], '%Y%m%d').strftime('%Y-%m-%d')
         s.code = code
         s.pb = data[3]
+        s.pe = data[1]
         list.append(s)
         pass
 

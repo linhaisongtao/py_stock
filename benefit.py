@@ -214,11 +214,13 @@ class BenefitChart(object):
             pbs = Util.get_list_last(StockInfo.get_pb_stocks(code), 1250)
             pb_count = len(pbs)
             pb_now = pbs[pb_count - 1].pb
+            pe_now = pbs[pb_count - 1].pe
             pb20 = sorted(pbs, cmp=self.__cmp_pb)[int(pb_count * 0.2)].pb
             print roe, pb_now, pb20, 1
             benefit_map = compute_benefit(10, roe / 100, pb_now, pb20)
             benefit_map['name'] = self.names[i]
             benefit_map['code'] = code
+            benefit_map['pe'] = pe_now
             b_list.append(benefit_map)
             benefit_map['count'] = 0
             if benefit_map['pb_benefit'] >= 3:
@@ -263,11 +265,13 @@ def sort_benefit():
     list = BenefitChart(names, codes).benefit_sort()
     csv_writer = csv.writer(open(Util.get_benefit_dir() + "/select.csv", 'wb'))
     csv_writer1 = csv.writer(open('selected_sorted.csv', 'wb'))
-    Util.print_row(['名字', 'code', '满足数量', '净资产收益率', '每股净资产', '买入pb', '1pb收益率', '买pb收益率', '20%pb收益率'], csv_writer)
+    Util.print_row(['名字', 'code', '满足数量', '净资产收益率', '每股净资产', '买入pb', '买入pe', '1pb收益率', '买pb收益率', '20%pb收益率'],
+                   csv_writer)
     for m in list:
         row = [m['name'], 'A' + m['code'], m['count'], Util.format_to_percentage(m['roe']),
                Util.format_float(m['pure']),
                Util.format_float(m['pb_buy']),
+               Util.format_float(m['pe']),
                Util.format_to_percentage(m['pb_benefit']),
                Util.format_to_percentage(m['pb_buy_future_benefit']), Util.format_to_percentage(m['pb_future_benefit'])]
         Util.print_row(row, csv_writer1)
