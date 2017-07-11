@@ -119,6 +119,8 @@ class BenefitChart(object):
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
             future_benefits.append(b['pb_future_benefit'])
+            pb_buy_last = b['pb_buy']
+            pb_20_last = b['pb_future']
             if only_one:
                 buy_pb_benefits.append(b['pb_buy_future_benefit'])
                 pure_benefits.append(b['pb_benefit'])
@@ -139,9 +141,11 @@ class BenefitChart(object):
         if only_one:
             plt.plot(years, buy_pb_benefits, linestyle=line_style)
             plt.plot(years, pure_benefits, linestyle=line_style)
-            plt.text(max_year, future_benefits[max_year], '20点位[%.2f%%] ' % (future_benefits[max_year] * 100),
+            plt.text(max_year, future_benefits[max_year],
+                     '20%%,%.2f[%.2f%%] ' % (pb_20_last, future_benefits[max_year] * 100),
                      fontsize=10, verticalalignment="center", horizontalalignment="left")
-            plt.text(max_year, buy_pb_benefits[max_year], '买入pb[%.2f%%] ' % (buy_pb_benefits[max_year] * 100),
+            plt.text(max_year, buy_pb_benefits[max_year],
+                     '买入,%.2f[%.2f%%] ' % (pb_buy_last, buy_pb_benefits[max_year] * 100),
                      fontsize=10, verticalalignment="center", horizontalalignment="left")
             plt.text(max_year, pure_benefits[max_year], '1倍pb[%.2f%%] ' % (pure_benefits[max_year] * 100),
                      fontsize=10, verticalalignment="center", horizontalalignment="left")
@@ -163,8 +167,12 @@ class BenefitChart(object):
         future_benefits = []
         buy_pb_benefits = []
         pure_benefits = []
+        pb_buy_last = 0
+        pb_20_last = 0
         for y in years:
             b = compute_benefit(y, roe, pb_buy, pb_future)
+            pb_buy_last = b['pb_buy']
+            pb_20_last = b['pb_future']
             future_benefits.append(b['pb_future_benefit'])
             buy_pb_benefits.append(b['pb_buy_future_benefit'])
             pure_benefits.append(b['pb_benefit'])
@@ -182,9 +190,9 @@ class BenefitChart(object):
         plt.plot(years, future_benefits, linestyle=line_style)
         plt.plot(years, buy_pb_benefits, linestyle=line_style)
         plt.plot(years, pure_benefits, linestyle=line_style)
-        plt.text(year, future_benefits[year], '20点位[%.2f%%] ' % (future_benefits[year] * 100),
+        plt.text(year, future_benefits[year], '20%%,%.2f[%.2f%%] ' % (pb_20_last, future_benefits[year] * 100),
                  fontsize=10, verticalalignment="center", horizontalalignment="left")
-        plt.text(year, buy_pb_benefits[year], '买入pb[%.2f%%] ' % (buy_pb_benefits[year] * 100),
+        plt.text(year, buy_pb_benefits[year], '买入,%.2f[%.2f%%] ' % (pb_buy_last, buy_pb_benefits[year] * 100),
                  fontsize=10, verticalalignment="center", horizontalalignment="left")
         plt.text(year, pure_benefits[year], '1倍pb[%.2f%%] ' % (pure_benefits[year] * 100),
                  fontsize=10, verticalalignment="center", horizontalalignment="left")
