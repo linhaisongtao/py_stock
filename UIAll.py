@@ -42,6 +42,3 @@ class UI(object):
         pass
 
     pass
-
-
-UI('000651', '测试').show()

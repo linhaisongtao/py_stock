@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# coding:utf-8
 import datetime
 from Tkinter import *
 
@@ -6,6 +8,7 @@ import SChart
 import StockInfo
 import benefit
 import rank as rk
+import UIAll
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -26,7 +29,10 @@ class Window(object):
         name = self.code_list[index]['name']
         title1 = name + "[" + code + "]%d" % 1
         s1 = StockInfo.get_pb_stocks(code, 1)
-        SChart.SChart([title1], [s1]).show()
+        # 只显示Pb信息的图表
+        # SChart.SChart([title1], [s1]).show()
+        # 显示pb历史，roe历史，未来收益的图表
+        UIAll.UI(code, name).show()
         pass
 
     def callCheckbutton(self):
