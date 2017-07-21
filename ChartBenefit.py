@@ -23,6 +23,7 @@ class BenefitChart(object):
         sub_plot.axvline(5, color='darkgray', linestyle=':')
         sub_plot.axvline(10, color='darkgray', linestyle=':')
         sub_plot.legend(['pure', 'sell20'])
+        plt.title("pure=%.2f sell20=%.2f" % (pures[len(pures) - 1], sell20[len(sell20) - 1]))
         pass
 
     pass

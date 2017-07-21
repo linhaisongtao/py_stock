@@ -31,6 +31,7 @@ class PbChart(object):
                 dates[index] = ''
                 pass
             pass
+        plt.title("now=%.2f pb20=%.2f pb50=%.2f pb80=%.2f" % (pb_now, pb20, pb50, pb80))
         return {'x': x, 'dates': dates, 'pb20': pb20, 'pb50': pb50, "pb80": pb80, "pb_now": pb_now}
         pass
 
