@@ -28,7 +28,7 @@ class Window(object):
         code = self.code_list[index]['code']
         name = self.code_list[index]['name']
         title1 = name + "[" + code + "]%d" % 1
-        s1 = StockInfo.get_pb_stocks(code, 1)
+        # s1 = StockInfo.get_pb_stocks(code, 1)
         # 只显示Pb信息的图表
         # SChart.SChart([title1], [s1]).show()
         # 显示pb历史，roe历史，未来收益的图表
