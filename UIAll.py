@@ -1,5 +1,10 @@
+#!/usr/bin/python
+# coding:utf-8
 import matplotlib.pyplot as plt
+import sys
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import ChartBenefit
 import ChartPb
 import ChartRoe
@@ -22,6 +27,7 @@ class UI(object):
 
         roe_data = ChartRoe.RoeChart().show(plt.subplot(311), self.roes)
         plt.xticks(roe_data['x'], roe_data['dates'])
+        plt.title(self.get_base_title())
 
         pb_data = ChartPb.PbChart().show(plt.subplot(312), self.pb_list)
         plt.xticks(pb_data['x'], pb_data['dates'])
@@ -31,7 +37,11 @@ class UI(object):
         plt.show()
         pass
 
+    def get_base_title(self):
+        return self.name + "[" + self.code + "]"
+        pass
+
     pass
 
 
-UI('600016', 'xy').show()
+UI('000651', '测试').show()

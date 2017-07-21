@@ -22,8 +22,8 @@ class PbChart(object):
         pb80 = sorted_pb[int(count * 0.8)]
         pb_now = pbs[len(pbs) - 1]
         sub_plot.axhline(pb20, color='g', linestyle='--', linewidth=1)
-        sub_plot.axhline(pb50, color='g', linestyle='--', linewidth=1)
-        sub_plot.axhline(pb80, color='g', linestyle='--', linewidth=1)
+        sub_plot.axhline(pb50, color='y', linestyle='--', linewidth=1)
+        sub_plot.axhline(pb80, color='r', linestyle='--', linewidth=1)
 
         count = len(dates) / 5
         for index, label in enumerate(dates):

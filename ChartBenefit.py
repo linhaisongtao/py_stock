@@ -18,10 +18,11 @@ class BenefitChart(object):
 
         sub_plot.plot(x, pures, color='y')
         sub_plot.plot(x, sell20, color='b')
-        sub_plot.axhline(1, color='darkgray', linestyle='-.')
-        sub_plot.axhline(3, color='darkgray', linestyle='-.')
-        sub_plot.axvline(5, color='darkgray', linestyle='-.')
-        sub_plot.axvline(5, color='darkgray', linestyle='-.')
+        sub_plot.axhline(1, color='darkgray', linestyle=':')
+        sub_plot.axhline(3, color='darkgray', linestyle=':')
+        sub_plot.axvline(5, color='darkgray', linestyle=':')
+        sub_plot.axvline(10, color='darkgray', linestyle=':')
+        sub_plot.legend(['pure', 'sell20'])
         pass
 
     pass
