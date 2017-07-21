@@ -6,7 +6,6 @@ import pandas as pd
 import StockInfo as si
 import SChart as sc
 import json, datetime, time
-import DateUtil
 import Util
 
 data_dir = '.p'
@@ -43,7 +42,7 @@ class StockInfo(object):
 
 
 def get_stocks(code='601166', average_year_count=1):
-    date_str = DateUtil.get_now_date_str()
+    date_str = Util.get_now_date_str()
 
     file_name = Util.get_dir_name() + "/" + code + "_" + date_str + ".json"
     list = []

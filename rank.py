@@ -3,7 +3,6 @@ import source
 import pandas as pd
 import hashlib
 import datetime, os, json
-import DateUtil
 
 
 class RankInfo(object):
