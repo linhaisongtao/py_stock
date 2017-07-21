@@ -97,7 +97,7 @@ def __write_to_file(name, list):
     pass
 
 
-def get_roes(code, average_year_count=1):
+def get_roes(code, average_year_count=1, max_count=-1):
     file_name = Util.get_dir_name() + "/roe_" + code + "_" + ".json"
     if os.path.exists(file_name):
         print 'read roe from file', file_name
@@ -159,7 +159,18 @@ def get_roes(code, average_year_count=1):
         s.roe5 = __compute_roe_average(s_list, i, 5)
         s.roe1 = __compute_roe_average(s_list, i, 1)
         pass
-    return s_list
+
+    if max_count > 0:
+        l = []
+        for i, s in enumerate(s_list):
+            if i < max_count:
+                l.append(s)
+            pass
+        return l
+        pass
+    else:
+        return s_list
+        pass
     pass
 
 
