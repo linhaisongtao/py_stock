@@ -9,6 +9,6 @@ sys.setdefaultencoding('utf-8')
 
 import benefit
 
-benefit.sort_benefit()
+# benefit.sort_benefit()
 
-Window.Window(source.get_selected_codes()).show()
+Window.Window(source.get_origin_selected_codes()).show()

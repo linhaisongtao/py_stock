@@ -39,6 +39,7 @@ def get_origin_selected_codes():
             s = {}
             s['code'] = l[0]
             s['name'] = l[1]
+            s['count'] = 0
             code_list.append(s)
         pass
         pass
